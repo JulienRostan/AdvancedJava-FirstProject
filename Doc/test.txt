@@ -1,0 +1,14 @@
+
+D�termination de l'itin�raire vers www.google.com [74.125.206.106]
+avec un maximum de 30 sauts�:
+
+  1     *        *        *     D�lai d'attente de la demande d�pass�.
+  2     *        *        *     D�lai d'attente de la demande d�pass�.
+  3     *        *        *     D�lai d'attente de la demande d�pass�.
+  4     *        *        *     D�lai d'attente de la demande d�pass�.
+  5     *        *        *     D�lai d'attente de la demande d�pass�.
+  6     *        *        *     D�lai d'attente de la demande d�pass�.
+  7     *        *        *     D�lai d'attente de la demande d�pass�.
+  8     *        *        *     D�lai d'attente de la demande d�pass�.
+  9     *        *        *     D�lai d'attente de la demande d�pass�.
+ 10     *        *        *     D�lai d'attente de la demande d�pass�.
