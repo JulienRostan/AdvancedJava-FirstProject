@@ -1,14 +1,22 @@
 
-D�termination de l'itin�raire vers www.google.com [74.125.206.106]
+D�termination de l'itin�raire vers www.google.com [74.125.24.104]
 avec un maximum de 30 sauts�:
 
-  1     *        *        *     D�lai d'attente de la demande d�pass�.
-  2     *        *        *     D�lai d'attente de la demande d�pass�.
-  3     *        *        *     D�lai d'attente de la demande d�pass�.
-  4     *        *        *     D�lai d'attente de la demande d�pass�.
-  5     *        *        *     D�lai d'attente de la demande d�pass�.
-  6     *        *        *     D�lai d'attente de la demande d�pass�.
-  7     *        *        *     D�lai d'attente de la demande d�pass�.
-  8     *        *        *     D�lai d'attente de la demande d�pass�.
-  9     *        *        *     D�lai d'attente de la demande d�pass�.
- 10     *        *        *     D�lai d'attente de la demande d�pass�.
+  1     1 ms     1 ms     1 ms  192.168.1.254 
+  2    37 ms    37 ms    37 ms  82.227.177.254 
+  3    36 ms    38 ms    37 ms  78.254.1.222 
+  4    37 ms    38 ms    37 ms  ram94-1-v900.intf.nra.proxad.net [78.254.255.61] 
+  5    37 ms    37 ms    41 ms  ivr94-1-v902.intf.nra.proxad.net [78.254.255.57] 
+  6    38 ms    37 ms    39 ms  stmaurice-6k-1-po3.intf.nra.proxad.net [78.254.255.53] 
+  7    45 ms    39 ms    40 ms  bzn-crs16-2-be1008.intf.routers.proxad.net [194.149.160.125] 
+  8    39 ms    40 ms    39 ms  cbv-9k-1-be1000.intf.routers.proxad.net [194.149.161.10] 
+  9    39 ms    40 ms    38 ms  74.125.50.116 
+ 10    49 ms    37 ms    52 ms  72.14.238.234 
+ 11    39 ms    39 ms    39 ms  209.85.245.83 
+ 12    47 ms    47 ms    47 ms  216.239.48.73 
+ 13    57 ms    55 ms    67 ms  209.85.250.216 
+ 14    56 ms    55 ms    56 ms  66.249.95.3 
+ 15     *        *        *     D�lai d'attente de la demande d�pass�.
+ 16    56 ms    56 ms    56 ms  de-in-f104.1e100.net [74.125.24.104] 
+
+Itin�raire d�termin�.
