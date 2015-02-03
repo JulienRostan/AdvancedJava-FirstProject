@@ -14,7 +14,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame
@@ -23,9 +22,9 @@ public class Window extends JFrame
 	private JTextField lien = new JTextField("");
 
 	private JButton tracer = new JButton("Tracer route");
-	private JButton aleatoire = new JButton("Tracer aléatoirement");
+	private JButton aleatoire = new JButton("Adresse IP aléatoire");
 	
-	private JLabel it = new JLabel("Nombre de sauts maximum");
+	private JLabel it = new JLabel("Nombre de sauts maximum (Windows)");
 	private JLabel li = new JLabel("Entrez un lien ou une adresse IP");
 	
 	private JLabel result = new JLabel("");
@@ -84,15 +83,24 @@ public class Window extends JFrame
 	{
 		public void actionPerformed(ActionEvent arg0)
 		{
-			String domain, iteration;
+			String domain, iteration, OS;
 
 			domain = lien.getText();
 			iteration = nbiteration.getText();
+			OS = Algorythme.getOS(System.getProperty("os.name"));
+			
 			if(domain.compareTo("") != 0)
 			{
-				footer.setText("Traçage de " + domain + " en " + iteration + " saut(s) maximum");
+				if(OS.compareTo("Windows") == 0)
+				{
+					footer.setText("Traçage de " + domain + " en " + iteration + " saut(s) maximum");
+				}
+				else
+				{
+					footer.setText("Traçage de " + domain);
+				}
 				
-				result.setText(graphe.tracerGraphe(iteration, domain));
+				result.setText(graphe.tracerGraphe(iteration, domain, OS));
 			}
 		}
 	}
@@ -102,7 +110,7 @@ public class Window extends JFrame
 		public void actionPerformed(ActionEvent arg0)
 		{
 			int i;
-			String domain, iteration;
+			String domain;
 			Random rand = new Random();
 			
 			domain = "";
@@ -112,11 +120,7 @@ public class Window extends JFrame
 			}
 			domain += (rand.nextInt(256) + 1);
 			
-			iteration = nbiteration.getText();
-			
-			footer.setText("Traçage de " + domain + " en " + iteration + " saut(s) maximum");
-			
-			result.setText(graphe.tracerGraphe(iteration, domain));
+			lien.setText(domain);
 		}
 	}
 }
