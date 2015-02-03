@@ -15,64 +15,175 @@ public class Graphe
 		graph.addNode("moi").addAttribute("ui.label", "moi");
 		graph.display();
 	}
-
-	public void ajouterChemin(String ips, String domain)
+	
+	public void ajouterChemin(ArrayList<TracerouteItem> listeIps, String domain)
 	{
-
-		int i, j;
-		ArrayList<String> listeIps = new ArrayList<String>();
-		String buffer;
+		int i, j, k = 0;
+		boolean ok = true;
+		boolean okdomain = false;
+		String ip;
 		
-		buffer = "";
-		j = 0;
-		for(i=0; i<ips.length(); i++)
+		ip = "";
+		
+		// Ajout des noeuds sauf le dernier
+		for(i=1; i<listeIps.size() - 1; i++)
 		{
-			if(ips.charAt(i) == '\n')
+			ip = listeIps.get(i).getAddress();
+			if(graph.getNode(ip) == null)
 			{
-				listeIps.add(j, buffer);
-				buffer = "";
-				j++;
+				graph.addNode(ip).addAttribute("ui.label", ip);
+				graph.getNode(ip).addAttribute("ui.style", "fill-color: rgb(100,100,255);");
+			}
+		}
+		
+		if(listeIps.size() > 1)
+		{
+			// Si on a atteind le domaine
+			if(listeIps.get(0).getAddress().compareTo(listeIps.get(listeIps.size() - 1).getAddress()) == 0)
+			{
+				okdomain = true;
+			}
+			if(okdomain)
+			{
+				// On l'ajoute en vert
+				if(graph.getNode(domain) == null)
+				{
+					graph.addNode(domain).addAttribute("ui.label", domain);
+				}
+				graph.getNode(domain).addAttribute("ui.style", "fill-color: rgb(100,255,100);");
 			}
 			else
 			{
-				buffer += ips.charAt(i);
+				// On l'ajoute en rouge
+				if(graph.getNode(domain) == null)
+				{
+					graph.addNode(domain).addAttribute("ui.label", domain);
+					graph.getNode(domain).addAttribute("ui.style", "fill-color: rgb(255,100,100);");
+				}
+				ip = listeIps.get(i).getAddress();
+				if(graph.getNode(ip) == null)
+				{
+					graph.addNode(ip).addAttribute("ui.label", ip);
+					graph.getNode(ip).addAttribute("ui.style", "fill-color: rgb(100,100,255);");
+				}
 			}
-		}
-		if(listeIps.get(0).compareTo(buffer) == 0)
-		{
-			listeIps.add(j, domain);
+		
+			// On ajoute le premier arc
+			ip = listeIps.get(1).getAddress();
+			
+			if(graph.getEdge(ip + "moi") == null
+					&& graph.getEdge("moi" + ip) == null)
+			{
+				graph.addEdge(ip + "moi", ip, "moi");
+			}
+			
+			j = listeIps.get(1).getLine();
+			
+			for(i=1; i<listeIps.size() - 1; i++)
+			{
+				if(listeIps.get(i + 1).getLine() != j)
+				{
+					if(ok == true)
+					{
+						if(i + 1 != listeIps.size() - 1 || okdomain == false)
+						{
+							if(graph.getEdge(listeIps.get(i).getAddress() + listeIps.get(i + 1).getAddress()) == null
+									&& graph.getEdge(listeIps.get(i + 1).getAddress() + listeIps.get(i).getAddress()) == null)
+							{
+								graph.addEdge(listeIps.get(i).getAddress() + listeIps.get(i + 1).getAddress(),
+										listeIps.get(i).getAddress(), listeIps.get(i + 1).getAddress());
+							}
+						}
+						else
+						{
+							if(graph.getEdge(listeIps.get(i).getAddress() + domain) == null
+									&& graph.getEdge(domain + listeIps.get(i).getAddress()) == null)
+							{
+								graph.addEdge(listeIps.get(i).getAddress() + domain,
+										listeIps.get(i).getAddress(), domain);
+							}
+						}
+						j = listeIps.get(i).getLine();
+						k = i;
+					}
+					else
+					{
+						for(j=k + 1; j<=i; j++)
+						{
+							if(graph.getEdge(listeIps.get(j).getAddress() + listeIps.get(i + 1).getAddress()) == null
+									&& graph.getEdge(listeIps.get(i + 1).getAddress() + listeIps.get(j).getAddress()) == null)
+							{
+								graph.addEdge(listeIps.get(j).getAddress() + listeIps.get(i + 1).getAddress(),
+										listeIps.get(j).getAddress(), listeIps.get(i + 1).getAddress());
+							}
+						}
+						ok = false;
+					}
+				}
+				else
+				{
+					if(graph.getEdge(listeIps.get(i - 1).getAddress() + listeIps.get(i + 1).getAddress()) == null
+							&& graph.getEdge(listeIps.get(i + 1).getAddress() + listeIps.get(i - 1).getAddress()) == null)
+					{
+						graph.addEdge(listeIps.get(i - 1).getAddress() + listeIps.get(i + 1).getAddress(),
+								listeIps.get(i - 1).getAddress(), listeIps.get(i + 1).getAddress());
+					}
+					ok = true;
+				}
+			}
 		}
 		else
 		{
-			j--;
+			// On l'ajoute en rouge
 			if(graph.getNode(domain) == null)
 			{
 				graph.addNode(domain).addAttribute("ui.label", domain);
-			}
-		}
-		
-		listeIps.remove(0);
-		listeIps.add(0, "moi");
-		
-		for(i=1; i<=j; i++)
-		{
-			if(graph.getNode(listeIps.get(i)) == null)
-			{
-				graph.addNode(listeIps.get(i)).addAttribute("ui.label", listeIps.get(i));
-			}
-		}
-		
-		for(i=0; i<j; i++)
-		{
-			if(listeIps.get(i).compareTo(listeIps.get(i + 1)) != 0)
-			{
-				if(graph.getEdge(listeIps.get(i) + listeIps.get(i + 1)) == null
-						&& graph.getEdge(listeIps.get(i + 1) + listeIps.get(i)) == null)
-				{
-					graph.addEdge(listeIps.get(i) + listeIps.get(i + 1), listeIps.get(i), listeIps.get(i + 1));
-				}
+				graph.getNode(domain).addAttribute("ui.style", "fill-color: rgb(255,100,100);");
 			}
 		}
 	}
 
+	public String tracerGraphe(String iteration, String domain)
+	{
+		String buffer;
+
+        Traceroute tr;
+        if(Algorythme.getOS(System.getProperty("os.name")).compareTo("Windows") == 0)
+        {
+        	tr = new WindowsTraceroute();
+        }
+        else
+        {
+        	tr = new LinuxTraceroute();
+        }
+        
+		buffer = Algorythme.confirmIteration(iteration);
+
+		if(buffer.compareTo("OK") == 0)
+		{
+			buffer = Algorythme.confirmDomain(domain);
+
+			if(buffer.compareTo("OK") == 0)
+			{
+		        ArrayList<TracerouteItem> l = tr.traceroute("-h " + iteration + " " + domain);
+		        
+				if(l.size() <= 0)
+				{
+					return "Nom de domaine ou adresse IP inconnue";
+				}
+				else
+				{
+					buffer = "";
+					for(int i=0; i<l.size(); i++)
+					{
+						buffer += l.get(i).getAddress() + "\n";
+					}
+					ajouterChemin(l, domain);
+					buffer = Algorythme.toHTML(buffer);
+					return buffer;
+				}
+			}
+		}
+		return buffer;
+	}
 }

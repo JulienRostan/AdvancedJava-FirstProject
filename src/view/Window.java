@@ -4,33 +4,42 @@ import modele.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame
 {
 	private JTextField nbiteration = new JTextField("30");
 	private JTextField lien = new JTextField("");
+
 	private JButton tracer = new JButton("Tracer route");
+	private JButton aleatoire = new JButton("Tracer aléatoirement");
+	
+	private JLabel it = new JLabel("Nombre de sauts maximum");
+	private JLabel li = new JLabel("Entrez un lien ou une adresse IP");
+	
 	private JLabel result = new JLabel("");
 
-	private JPanel pan = new JPanel();
-	private JPanel hpan = new JPanel();
+	private JLabel footer = new JLabel("");
 	
-	private FlowLayout barre = new FlowLayout();
+	private JPanel pan = new JPanel();
+	private JPanel header = new JPanel();
 	
 	private BorderLayout panlayout = new BorderLayout();
 
 	private Graphe graphe = new Graphe();
+	
+	JFrame test = this;
 	
 	public Window()
 	{
@@ -45,23 +54,26 @@ public class Window extends JFrame
 	    pan.setBackground(Color.WHITE);
 	    
 	    pan.setLayout(panlayout);
-	    hpan.setLayout(barre);
-
-	    nbiteration.setPreferredSize(new Dimension(50, 24));
-	    lien.setPreferredSize(new Dimension(200, 24));
+	    header.setLayout(new GridLayout(2, 3));
 	    
 	    // Listeners
 	    tracer.addActionListener(new Tracer());
 	    
+	    aleatoire.addActionListener(new TracerAlea());
 	    
-	    // Ajout du hpan
-	    hpan.add(nbiteration);
-	    hpan.add(lien);
-	    hpan.add(tracer);
+	    // Ajout du input
+	    header.add(it);
+	    header.add(li);
+	    header.add(aleatoire);
 	    
+	    header.add(nbiteration);
+	    header.add(lien);
+	    header.add(tracer);
+
 	    // Ajout du pan
-	    pan.add(hpan, BorderLayout.NORTH);
-	    pan.add(result, BorderLayout.CENTER);
+	    pan.add(header, BorderLayout.NORTH);
+	    pan.add(result, BorderLayout.WEST);
+	    pan.add(footer, BorderLayout.SOUTH);
 	    
 	    this.setContentPane(pan);
 	    
@@ -72,45 +84,39 @@ public class Window extends JFrame
 	{
 		public void actionPerformed(ActionEvent arg0)
 		{
-			String ips, commande, buffer, domain, iteration;
+			String domain, iteration;
 
 			domain = lien.getText();
 			iteration = nbiteration.getText();
-			
-			buffer = Algorythme.confirmDomain(domain);
-			
-			if(buffer.compareTo("OK") == 0)
+			if(domain.compareTo("") != 0)
 			{
-				buffer = Algorythme.confirmIteration(iteration);
+				footer.setText("Traçage de " + domain + " en " + iteration + " saut(s) maximum");
 				
-				if(buffer.compareTo("OK") == 0)
-				{
-					commande = "tracert -h " + iteration + " " + domain;
-					
-					buffer = Commande.executeCommand(commande);
-					
-					ips = Algorythme.obtenirIp(buffer);
-					//ips = "1.1.1.1\n1.1.1.2\n1.1.1.3\n1.1.1.4\n1.1.1.2\n1.1.1.5\n1.1.1.6\n1.1.1.7\n";
-					
-					if(ips.compareTo("") == 0)
-					{
-						result.setText("Nom de domaine ou adresse IP inconnue");
-					}
-					else
-					{
-						graphe.ajouterChemin(ips, domain);
-					}
-				}
-				else
-				{
-					result.setText(buffer);
-				}
-			}
-			else
-			{
-				result.setText(buffer);
+				result.setText(graphe.tracerGraphe(iteration, domain));
 			}
 		}
-		
+	}
+
+	class TracerAlea implements ActionListener
+	{
+		public void actionPerformed(ActionEvent arg0)
+		{
+			int i;
+			String domain, iteration;
+			Random rand = new Random();
+			
+			domain = "";
+			for(i=0; i<3; i++)
+			{
+				domain += (rand.nextInt(256) + 1) + ".";
+			}
+			domain += (rand.nextInt(256) + 1);
+			
+			iteration = nbiteration.getText();
+			
+			footer.setText("Traçage de " + domain + " en " + iteration + " saut(s) maximum");
+			
+			result.setText(graphe.tracerGraphe(iteration, domain));
+		}
 	}
 }
