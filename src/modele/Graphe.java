@@ -143,12 +143,12 @@ public class Graphe
 		}
 	}
 
-	public String tracerGraphe(String iteration, String domain)
+	public String tracerGraphe(String iteration, String domain, String OS)
 	{
 		String buffer;
 
         Traceroute tr;
-        if(Algorythme.getOS(System.getProperty("os.name")).compareTo("Windows") == 0)
+        if(OS.compareTo("Windows") == 0)
         {
         	tr = new WindowsTraceroute();
         }
@@ -165,7 +165,16 @@ public class Graphe
 
 			if(buffer.compareTo("OK") == 0)
 			{
-		        ArrayList<TracerouteItem> l = tr.traceroute("-h " + iteration + " " + domain);
+		        ArrayList<TracerouteItem> l;
+		        
+		        if(OS.compareTo("Windows") == 0)
+		        {
+		        	l = tr.traceroute("-h " + iteration + " " + domain);
+		        }
+		        else
+		        {
+		        	l = tr.traceroute(domain);
+		        }
 		        
 				if(l.size() <= 0)
 				{
