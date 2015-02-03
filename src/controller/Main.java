@@ -1,15 +1,5 @@
 package controller;
 
-<<<<<<< HEAD
-public class Main
-{
-	
-	public static void main(String[] args)
-	{
-
-	}
-}
-=======
 import view.*;
 
 public class Main
@@ -21,4 +11,3 @@ public class Main
 		window = new Window();
 	}
 }
->>>>>>> Nicolas

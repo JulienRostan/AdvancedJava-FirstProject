@@ -1,16 +1,5 @@
 package view;
 
-<<<<<<< HEAD
-import javax.swing.JFrame;
-
-public class Window extends JFrame
-{
-	public Window()
-	{
-		
-	}
-}
-=======
 import modele.*;
 
 import java.awt.BorderLayout;
@@ -131,4 +120,3 @@ public class Window extends JFrame
 		}
 	}
 }
->>>>>>> Nicolas
